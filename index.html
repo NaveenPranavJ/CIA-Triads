@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CIA Triad Security Demo</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<!-- ===========================
+BACKGROUND
+=========================== -->
+
+<div class="background">
+
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+
+</div>
+
+<!-- ===========================
+LOGIN PAGE
+=========================== -->
+
+<section id="loginPage">
+
+<div class="login-card">
+
+<div class="logo">
+
+<div class="shield">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+</div>
+
+<h1>CIA DEMO</h1>
+
+<p>Confidentiality • Integrity • Availability</p>
+
+</div>
+
+<form id="loginForm">
+
+<div class="input-box">
+
+<i class="fa-solid fa-user"></i>
+
+<input
+type="text"
+id="username"
+placeholder="Username"
+autocomplete="off"
+required>
+
+</div>
+
+<div class="input-box">
+
+<i class="fa-solid fa-lock"></i>
+
+<input
+type="password"
+id="password"
+placeholder="Password"
+required>
+
+<i
+class="fa-solid fa-eye toggle"
+id="togglePassword"></i>
+
+</div>
+
+<button
+class="login-btn"
+type="submit">
+
+LOGIN
+
+</button>
+
+</form>
+
+<div class="demo">
+
+<p>
+
+Demo Login
+
+</p>
+
+<strong>
+
+Username :
+admin+123
+
+</strong>
+
+<br>
+
+<strong>
+
+Password :
+CIA@2026
+
+</strong>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===========================
+DASHBOARD
+=========================== -->
+
+<section
+id="dashboard"
+class="hidden">
+
+<!-- Sidebar -->
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<i class="fa-solid fa-shield-halved"></i>
+
+<span>CIA</span>
+
+</div>
+
+<ul>
+
+<li class="menu active" data-page="dash">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Dashboard
+
+</li>
+
+<li class="menu" data-page="security">
+
+<i class="fa-solid fa-lock"></i>
+
+Security
+
+</li>
+
+<li class="menu" data-page="servers">
+
+<i class="fa-solid fa-server"></i>
+
+Servers
+
+</li>
+
+<li class="menu" data-page="analytics">
+
+<i class="fa-solid fa-chart-simple"></i>
+
+Analytics
+
+</li>
+
+<li id="logout">
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+Logout
+
+</li>
+
+</ul>
+
+</aside>
+
+<!-- Main -->
+
+<div class="main">
+
+<header>
+
+<div>
+
+<h2>
+
+Welcome,
+
+<span id="userDisplay">
+
+Admin
+
+</span>
+
+</h2>
+
+<p>
+
+CIA Triad Demonstration Dashboard
+
+</p>
+
+</div>
+
+<div class="profile">
+
+<i class="fa-solid fa-user-secret"></i>
+
+</div>
+
+</header>
+
+<!-- ===========================
+Dashboard Page
+=========================== -->
+
+<section
+id="dash"
+class="page">
+
+<div class="stats">
+
+<div class="stat">
+
+<h3>Threats Blocked</h3>
+
+<h1 id="threatCount">
+
+1254
+
+</h1>
+
+</div>
+
+<div class="stat">
+
+<h3>System Uptime</h3>
+
+<h1>
+
+99.9%
+
+</h1>
+
+</div>
+
+<div class="stat">
+
+<h3>Servers Online</h3>
+
+<h1 id="serverCount">
+
+2
+
+</h1>
+
+</div>
+
+</div>
+
+<div class="cards">
+
+<div class="card confidentiality">
+
+<div class="icon">
+
+<i class="fa-solid fa-user-lock"></i>
+
+</div>
+
+<h2>
+
+Confidentiality
+
+</h2>
+
+<p>
+
+Protect sensitive information using encryption and authentication.
+
+</p>
+
+<button>
+
+Learn More
+
+</button>
+
+</div>
+
+<div class="card integrity">
+
+<div class="icon">
+
+<i class="fa-solid fa-shield"></i>
+
+</div>
+
+<h2>
+
+Integrity
+
+</h2>
+
+<p>
+
+Verify files with SHA-256 hashing to detect unauthorized changes.
+
+</p>
+
+<button>
+
+Learn More
+
+</button>
+
+</div>
+
+<div class="card availability">
+
+<div class="icon">
+
+<i class="fa-solid fa-server"></i>
+
+</div>
+
+<h2>
+
+Availability
+
+</h2>
+
+<p>
+
+Maintain reliable services using server monitoring and recovery.
+
+</p>
+
+<button>
+
+Learn More
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===========================
+Security Page
+=========================== -->
+
+<section
+id="security"
+class="page hidden">
+
+<h2>
+
+Security Demonstration
+
+</h2>
+
+<br>
+
+<h3>
+
+Confidentiality
+
+</h3>
+
+<button id="encrypt">
+
+Encrypt
+
+</button>
+
+<button id="decrypt">
+
+Decrypt
+
+</button>
+
+<pre id="cipherOutput">
+
+</pre>
+
+<br>
+
+<h3>
+
+Integrity
+
+</h3>
+
+<textarea
+id="hashInput"
+rows="5"
+style="width:100%;padding:15px;border-radius:12px;">
+
+Important File
+
+</textarea>
+
+<br><br>
+
+<strong>
+
+SHA-256
+
+</strong>
+
+<p id="hashOutput"></p>
+
+</section>
+
+<!-- ===========================
+Server Page
+=========================== -->
+
+<section
+id="servers"
+class="page hidden">
+
+<h2>
+
+Availability Demo
+
+</h2>
+
+<br>
+
+<div class="stat">
+
+<h3>
+
+Server A
+
+</h3>
+
+<p>
+
+✅ Online
+
+</p>
+
+</div>
+
+<br>
+
+<div class="stat">
+
+<h3>
+
+Server B
+
+</h3>
+
+<p>
+
+✅ Online
+
+</p>
+
+</div>
+
+<br>
+
+<div class="stat">
+
+<h3>
+
+Server C
+
+</h3>
+
+<p id="serverStatus">
+
+❌ Offline
+
+</p>
+
+<button
+id="restartServer">
+
+Restart Server
+
+</button>
+
+<p
+id="serverMessage">
+
+</p>
+
+</div>
+
+</section>
+
+<!-- ===========================
+Analytics Page
+=========================== -->
+
+<section
+id="analytics"
+class="page hidden">
+
+<h2>
+
+Security Analytics
+
+</h2>
+
+<br>
+
+<div class="stats">
+
+<div class="stat">
+
+<h3>
+
+Threats Blocked
+
+</h3>
+
+<h1 id="analyticsThreats">
+
+1254
+
+</h1>
+
+</div>
+
+<div class="stat">
+
+<h3>
+
+Login Attempts
+
+</h3>
+
+<h1>
+
+42
+
+</h1>
+
+</div>
+
+<div class="stat">
+
+<h3>
+
+Risk Level
+
+</h3>
+
+<h1>
+
+LOW
+
+</h1>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+</section>
+
+<script src="script.js"></script>
+
+</body>
+</html>
