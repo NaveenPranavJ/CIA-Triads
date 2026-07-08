@@ -1,1841 +1,767 @@
 /* ==========================================
-   PART B1.1
-   GLOBAL STYLES + THEME + BACKGROUND
+   PART C1.1
+   LOGIN • LOGOUT • NAVIGATION
 ========================================== */
 
-/* Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+/* ==========================================
+   DEMO LOGIN DATA
+========================================== */
 
-/* Reset */
+const a_data = {
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
+    username: "admin+123",
 
-/* Theme */
+    password: "CIA@2026"
 
-:root{
+};
 
-    --primary:#00d4ff;
-    --secondary:#7a3cff;
+/* ==========================================
+   DOM ELEMENTS
+========================================== */
 
-    --bg1:#050b18;
-    --bg2:#08182f;
-    --bg3:#12254a;
+const loginPage = document.getElementById("loginPage");
+const dashboard = document.getElementById("dashboard");
 
-    --card:rgba(255,255,255,.08);
+const loginForm = document.getElementById("loginForm");
 
-    --border:rgba(255,255,255,.12);
+const username = document.getElementById("username");
+const password = document.getElementById("password");
 
-    --text:#ffffff;
-    --text-light:#cdd8e8;
+const togglePassword = document.getElementById("togglePassword");
 
-    --success:#00d084;
-    --warning:#ffb300;
-    --danger:#ff4d6d;
+const userDisplay = document.getElementById("userDisplay");
 
-}
+const logout = document.getElementById("logout");
 
-/* Body */
+const menuItems = document.querySelectorAll(".menu");
 
-body{
+const pages = document.querySelectorAll(".page");
 
-    min-height:100vh;
+/* ==========================================
+   PASSWORD SHOW / HIDE
+========================================== */
 
-    overflow-x:hidden;
+togglePassword.addEventListener("click", () => {
 
-    color:var(--text);
+    if (password.type === "password") {
 
-    background:
-    linear-gradient(
-        135deg,
-        var(--bg1),
-        var(--bg2),
-        var(--bg3)
+        password.type = "text";
+
+        togglePassword.classList.remove("fa-eye");
+        togglePassword.classList.add("fa-eye-slash");
+
+    } else {
+
+        password.type = "password";
+
+        togglePassword.classList.remove("fa-eye-slash");
+        togglePassword.classList.add("fa-eye");
+
+    }
+
+});
+
+/* ==========================================
+   LOGIN
+========================================== */
+
+loginForm.addEventListener("submit", function (e) {
+
+    e.preventDefault();
+
+    const user = username.value.trim();
+    const pass = password.value;
+
+    if (user === "" || pass === "") {
+
+        alert("Please enter username and password.");
+
+        return;
+
+    }
+
+    if (user !== a_data.username || pass !== a_data.password) {
+
+        alert("Invalid Username or Password.");
+
+        return;
+
+    }
+
+    const button = document.querySelector(".login-btn");
+
+    button.disabled = true;
+
+    button.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i> Logging in...';
+
+    setTimeout(() => {
+
+        userDisplay.textContent = user;
+
+        loginPage.style.opacity = "0";
+
+        loginPage.style.transform = "scale(.95)";
+
+        setTimeout(() => {
+
+            loginPage.style.display = "none";
+
+            dashboard.classList.remove("hidden");
+
+            dashboard.classList.add("fade-in");
+
+        }, 500);
+
+    }, 1200);
+
+});
+
+/* ==========================================
+   LOGOUT
+========================================== */
+
+logout.addEventListener("click", () => {
+
+    dashboard.classList.add("hidden");
+
+    loginPage.style.display = "flex";
+
+    setTimeout(() => {
+
+        loginPage.style.opacity = "1";
+
+        loginPage.style.transform = "scale(1)";
+
+    }, 100);
+
+    username.value = "";
+
+    password.value = "";
+
+    password.type = "password";
+
+    togglePassword.classList.remove("fa-eye-slash");
+    togglePassword.classList.add("fa-eye");
+
+    const button = document.querySelector(".login-btn");
+
+    button.disabled = false;
+
+    button.innerHTML = "LOGIN";
+
+});
+
+/* ==========================================
+   SIDEBAR NAVIGATION
+========================================== */
+
+menuItems.forEach(item => {
+
+    item.addEventListener("click", () => {
+
+        menuItems.forEach(menu => {
+
+            menu.classList.remove("active");
+
+        });
+
+        item.classList.add("active");
+
+        pages.forEach(page => {
+
+            page.classList.add("hidden");
+
+        });
+
+        const target = item.dataset.page;
+
+        document.getElementById(target).classList.remove("hidden");
+
+        document
+            .getElementById(target)
+            .classList.add("fade-up");
+
+    });
+
+});
+
+/* ==========================================
+   ENTER KEY LOGIN
+========================================== */
+
+document.addEventListener("keydown", (e) => {
+
+    if (
+        e.key === "Enter" &&
+        loginPage.style.display !== "none"
+    ) {
+
+        loginForm.requestSubmit();
+
+    }
+
+});
+/* ==========================================
+   PART C1.2
+   CIA TRIAD FUNCTIONALITY
+   Confidentiality
+   Integrity
+   Availability
+========================================== */
+
+/* ==========================================
+   DOM ELEMENTS
+========================================== */
+
+const encryptBtn = document.getElementById("encrypt");
+const decryptBtn = document.getElementById("decrypt");
+
+const cipherOutput = document.getElementById("cipherOutput");
+
+const hashInput = document.getElementById("hashInput");
+const hashOutput = document.getElementById("hashOutput");
+
+const restartServer = document.getElementById("restartServer");
+const serverStatus = document.getElementById("serverStatus");
+const serverMessage = document.getElementById("serverMessage");
+
+const analyticsThreats =
+document.getElementById("analyticsThreats");
+
+const threatCount =
+document.getElementById("threatCount");
+
+const serverCount =
+document.getElementById("serverCount");
+
+/* ==========================================
+   CONFIDENTIALITY
+   BASE64 ENCRYPTION DEMO
+========================================== */
+
+let encryptedText = "";
+
+encryptBtn.addEventListener("click", () => {
+
+    const text = hashInput.value.trim();
+
+    if(text === ""){
+
+        alert("Please enter some text first.");
+
+        return;
+
+    }
+
+    encryptedText = btoa(text);
+
+    cipherOutput.textContent = encryptedText;
+
+});
+
+decryptBtn.addEventListener("click", () => {
+
+    if(encryptedText === ""){
+
+        alert("Nothing to decrypt.");
+
+        return;
+
+    }
+
+    try{
+
+        cipherOutput.textContent =
+        atob(encryptedText);
+
+    }
+
+    catch(error){
+
+        alert("Unable to decrypt.");
+
+    }
+
+});
+
+/* ==========================================
+   INTEGRITY
+   SHA-256 HASH
+========================================== */
+
+async function generateHash(){
+
+    const message = hashInput.value;
+
+    const encoder = new TextEncoder();
+
+    const data = encoder.encode(message);
+
+    const buffer =
+    await crypto.subtle.digest(
+        "SHA-256",
+        data
     );
 
-    position:relative;
+    const hashArray =
+    Array.from(
+        new Uint8Array(buffer)
+    );
+
+    const hashHex =
+    hashArray
+    .map(byte =>
+        byte.toString(16)
+        .padStart(2,"0")
+    )
+    .join("");
+
+    hashOutput.textContent = hashHex;
 
 }
 
-/* Links */
+hashInput.addEventListener(
+    "input",
+    generateHash
+);
 
-a{
+generateHash();
 
-    color:inherit;
+/* ==========================================
+   AVAILABILITY
+   SERVER RESTART DEMO
+========================================== */
 
-    text-decoration:none;
+restartServer.addEventListener("click", () => {
+
+    serverStatus.innerHTML =
+    "🟡 Restarting...";
+
+    serverMessage.innerHTML =
+    "Restart in progress...";
+
+    restartServer.disabled = true;
+
+    setTimeout(() => {
+
+        serverStatus.innerHTML =
+        "✅ Online";
+
+        serverMessage.innerHTML =
+        "Server C successfully restarted.";
+
+        serverCount.textContent = "3";
+
+        restartServer.disabled = false;
+
+    },2000);
+
+});
+
+/* ==========================================
+   LIVE THREAT COUNTER
+========================================== */
+
+let threats = 1254;
+
+function updateThreatCounter(){
+
+    threats++;
+
+    threatCount.textContent =
+    threats.toLocaleString();
+
+    analyticsThreats.textContent =
+    threats.toLocaleString();
 
 }
 
-/* Buttons */
+setInterval(
+    updateThreatCounter,
+    3000
+);
 
-button{
+/* ==========================================
+   DASHBOARD COUNTER ANIMATION
+========================================== */
 
-    cursor:pointer;
+function animateCounter(
+    element,
+    target,
+    duration = 1500
+){
 
-    border:none;
+    let current = 0;
 
-    outline:none;
+    const increment =
+    target / (duration / 16);
 
-    font-family:inherit;
+    function update(){
 
-}
+        current += increment;
 
-/* Inputs */
+        if(current >= target){
 
-input,
-textarea{
+            element.textContent =
+            target.toLocaleString();
 
-    font-family:inherit;
+            return;
 
-    outline:none;
+        }
 
-}
+        element.textContent =
+        Math.floor(current)
+        .toLocaleString();
 
-/* Hidden */
+        requestAnimationFrame(update);
 
-.hidden{
+    }
 
-    display:none !important;
-
-}
-
-/* Smooth scrolling */
-
-html{
-
-    scroll-behavior:smooth;
+    update();
 
 }
 
 /* ==========================================
-   FLOATING BACKGROUND
+   START COUNTERS AFTER LOGIN
 ========================================== */
 
-.background{
+loginForm.addEventListener("submit", () => {
 
-    position:fixed;
+    setTimeout(() => {
 
-    inset:0;
+        animateCounter(
+            threatCount,
+            threats
+        );
 
-    overflow:hidden;
+        animateCounter(
+            analyticsThreats,
+            threats
+        );
 
-    z-index:-2;
+    },1300);
 
-}
+});
+/* ==========================================
+   PART C2
+   UI ENHANCEMENTS & ANIMATIONS
+========================================== */
 
-/* Glow */
+/* ==========================================
+   LIVE CLOCK
+========================================== */
 
-.background::before{
+const header = document.querySelector("header");
 
-    content:"";
+if (header) {
 
-    position:absolute;
+    const clock = document.createElement("div");
 
-    inset:0;
+    clock.id = "liveClock";
 
-    background:
+    clock.style.color = "#cfd8e3";
+    clock.style.fontWeight = "600";
+    clock.style.fontSize = "15px";
 
-    radial-gradient(circle at top left,
-    rgba(0,212,255,.08),
-    transparent 40%),
+    header.appendChild(clock);
 
-    radial-gradient(circle at bottom right,
-    rgba(122,60,255,.08),
-    transparent 40%);
+    function updateClock() {
 
-}
+        const now = new Date();
 
-/* Floating Blobs */
+        clock.textContent =
+            now.toLocaleTimeString();
 
-.background span{
+    }
 
-    position:absolute;
+    updateClock();
 
-    border-radius:50%;
-
-    background:
-
-    linear-gradient(
-        135deg,
-        rgba(0,212,255,.15),
-        rgba(122,60,255,.15)
-    );
-
-    filter:blur(10px);
-
-    animation:floatBlob 18s linear infinite;
-
-}
-
-/* Blob 1 */
-
-.background span:nth-child(1){
-
-    width:260px;
-    height:260px;
-
-    top:5%;
-    left:5%;
-
-}
-
-/* Blob 2 */
-
-.background span:nth-child(2){
-
-    width:180px;
-    height:180px;
-
-    top:65%;
-    left:75%;
-
-    animation-delay:4s;
-
-}
-
-/* Blob 3 */
-
-.background span:nth-child(3){
-
-    width:220px;
-    height:220px;
-
-    top:28%;
-    left:45%;
-
-    animation-delay:8s;
-
-}
-
-/* Blob 4 */
-
-.background span:nth-child(4){
-
-    width:150px;
-    height:150px;
-
-    bottom:10%;
-    left:15%;
-
-    animation-delay:2s;
-
-}
-
-/* Blob 5 */
-
-.background span:nth-child(5){
-
-    width:300px;
-    height:300px;
-
-    top:8%;
-    right:5%;
-
-    animation-delay:6s;
-
-}
-
-/* Overlay */
-
-body::after{
-
-    content:"";
-
-    position:fixed;
-
-    inset:0;
-
-    pointer-events:none;
-
-    background:
-
-    linear-gradient(
-
-        rgba(255,255,255,.02),
-        transparent 35%,
-        rgba(255,255,255,.015)
-
-    );
-
-    z-index:-1;
+    setInterval(updateClock,1000);
 
 }
 
 /* ==========================================
-   ANIMATIONS
+   BUTTON RIPPLE EFFECT
 ========================================== */
 
-@keyframes floatBlob{
+document.querySelectorAll("button").forEach(button=>{
 
-    0%{
+    button.addEventListener("click",function(e){
 
-        transform:
-        translateY(0)
-        rotate(0deg);
+        const ripple=document.createElement("span");
 
-    }
+        const size=Math.max(
+            this.offsetWidth,
+            this.offsetHeight
+        );
 
-    25%{
+        ripple.style.position="absolute";
+        ripple.style.width=size+"px";
+        ripple.style.height=size+"px";
+        ripple.style.borderRadius="50%";
+        ripple.style.background="rgba(255,255,255,.35)";
+        ripple.style.left=
+            (e.offsetX-size/2)+"px";
+        ripple.style.top=
+            (e.offsetY-size/2)+"px";
 
-        transform:
-        translateY(-35px)
-        rotate(90deg);
+        ripple.style.transform="scale(0)";
+        ripple.style.pointerEvents="none";
 
-    }
+        ripple.style.animation=
+            "buttonRipple .6s linear";
 
-    50%{
+        this.appendChild(ripple);
 
-        transform:
-        translateY(-60px)
-        rotate(180deg);
+        setTimeout(()=>{
 
-    }
+            ripple.remove();
 
-    75%{
+        },600);
 
-        transform:
-        translateY(-25px)
-        rotate(270deg);
+    });
 
-    }
+});
 
-    100%{
+/* ==========================================
+   RIPPLE STYLE
+========================================== */
 
-        transform:
-        translateY(0)
-        rotate(360deg);
+const rippleStyle=document.createElement("style");
 
-    }
+rippleStyle.innerHTML=`
 
-}
+@keyframes buttonRipple{
 
-@keyframes fadeIn{
+0%{
 
-    from{
+transform:scale(0);
 
-        opacity:0;
-
-    }
-
-    to{
-
-        opacity:1;
-
-    }
+opacity:.8;
 
 }
 
-@keyframes fadeUp{
+100%{
 
-    from{
+transform:scale(4);
 
-        opacity:0;
-
-        transform:
-        translateY(40px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-        translateY(0);
-
-    }
+opacity:0;
 
 }
 
-@keyframes pulseGlow{
+}
 
-    0%{
+`;
 
-        transform:scale(1);
+document.head.appendChild(rippleStyle);
 
-        box-shadow:
-        0 0 20px rgba(0,212,255,.35);
+/* ==========================================
+   CARD HOVER EFFECT
+========================================== */
 
-    }
+document.querySelectorAll(".card").forEach(card=>{
 
-    50%{
+    card.addEventListener("mousemove",(e)=>{
 
-        transform:scale(1.06);
+        const rect=card.getBoundingClientRect();
 
-        box-shadow:
-        0 0 40px rgba(0,212,255,.65);
+        const x=e.clientX-rect.left;
+        const y=e.clientY-rect.top;
 
-    }
+        const rotateY=
+        ((x-rect.width/2)/20);
 
-    100%{
+        const rotateX=
+        (-(y-rect.height/2)/20);
 
-        transform:scale(1);
+        card.style.transform=
 
-        box-shadow:
-        0 0 20px rgba(0,212,255,.35);
+        `perspective(900px)
+        rotateX(${rotateX}deg)
+        rotateY(${rotateY}deg)
+        translateY(-8px)`;
 
-    }
+    });
+
+    card.addEventListener("mouseleave",()=>{
+
+        card.style.transform="";
+
+    });
+
+});
+
+/* ==========================================
+   FLOATING BACKGROUND PARALLAX
+========================================== */
+
+const blobs=
+document.querySelectorAll(".background span");
+
+document.addEventListener("mousemove",(e)=>{
+
+    const x=
+    (window.innerWidth/2-e.clientX)/50;
+
+    const y=
+    (window.innerHeight/2-e.clientY)/50;
+
+    blobs.forEach((blob,index)=>{
+
+        blob.style.transform=
+
+        `translate(
+            ${x*(index+1)}px,
+            ${y*(index+1)}px
+        )`;
+
+    });
+
+});
+
+/* ==========================================
+   CIA INFORMATION
+========================================== */
+
+const messages={
+
+Confidentiality:
+"Confidentiality protects sensitive information by using authentication, authorization and encryption.",
+
+Integrity:
+"Integrity ensures information remains accurate, complete and unaltered using hashing and validation.",
+
+Availability:
+"Availability ensures systems and data remain accessible through redundancy, monitoring and recovery."
+
+};
+
+document.querySelectorAll(".card button")
+
+.forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+const title=
+
+button.parentElement
+.querySelector("h2")
+.textContent;
+
+alert(messages[title]);
+
+});
+
+});
+
+/* ==========================================
+   PAGE TRANSITION
+========================================== */
+
+document.querySelectorAll(".menu")
+
+.forEach(menu=>{
+
+menu.addEventListener("click",()=>{
+
+const visible=
+
+document.querySelector(".page:not(.hidden)");
+
+if(visible){
+
+visible.classList.remove("fade-up");
+
+void visible.offsetWidth;
+
+visible.classList.add("fade-up");
+
+}
+
+});
+
+});
+
+/* ==========================================
+   PROFILE ANIMATION
+========================================== */
+
+const profile=document.querySelector(".profile");
+
+if(profile){
+
+profile.addEventListener("mouseenter",()=>{
+
+profile.style.boxShadow=
+
+"0 0 30px rgba(0,212,255,.5)";
+
+});
+
+profile.addEventListener("mouseleave",()=>{
+
+profile.style.boxShadow="";
+
+});
 
 }
 
 /* ==========================================
-   SCROLLBAR
+   LOGIN INPUT FOCUS EFFECT
 ========================================== */
 
-::-webkit-scrollbar{
+document
+.querySelectorAll("input,textarea")
 
-    width:10px;
+.forEach(input=>{
 
-}
+input.addEventListener("focus",()=>{
 
-::-webkit-scrollbar-track{
+input.style.transform="scale(1.02)";
 
-    background:#06101d;
+});
 
-}
+input.addEventListener("blur",()=>{
 
-::-webkit-scrollbar-thumb{
+input.style.transform="scale(1)";
 
-    border-radius:20px;
+});
 
-    background:
-
-    linear-gradient(
-
-        var(--primary),
-        var(--secondary)
-
-    );
-
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-    background:
-
-    linear-gradient(
-
-        var(--secondary),
-        var(--primary)
-
-    );
-
-}
+});
 
 /* ==========================================
-   UTILITY CLASSES
+   RANDOM ANALYTICS UPDATE
 ========================================== */
 
-.text-center{
+const uptime=document.querySelectorAll(".stat h1");
 
-    text-align:center;
+setInterval(()=>{
 
-}
+if(uptime.length>1){
 
-.mt-20{
+const value=
 
-    margin-top:20px;
+(99.8+Math.random()*0.2)
 
-}
+.toFixed(2);
 
-.mb-20{
-
-    margin-bottom:20px;
+uptime[1].textContent=value+"%";
 
 }
 
-.fade-in{
+},5000);
 
-    animation:fadeIn .8s ease;
-
-}
-
-.fade-up{
-
-    animation:fadeUp .8s ease;
-
-}
 /* ==========================================
-   PART B1.2
-   LOGIN PAGE
+   STARTUP MESSAGE
 ========================================== */
 
-/* Login Container */
+window.addEventListener("load",()=>{
 
-#loginPage{
+console.log(
 
-    width:100%;
-    min-height:100vh;
+"CIA Triad Demo Loaded Successfully."
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+);
 
-    padding:40px 20px;
-
-    animation:fadeIn .8s ease;
-
-}
-
-/* Login Card */
-
-.login-card{
-
-    width:430px;
-    max-width:100%;
-
-    padding:45px 40px;
-
-    border-radius:25px;
-
-    background:rgba(255,255,255,.08);
-
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-
-    border:1px solid rgba(255,255,255,.12);
-
-    box-shadow:
-
-        0 15px 45px rgba(0,0,0,.35),
-        0 0 35px rgba(0,212,255,.08);
-
-    animation:fadeUp .9s ease;
-
-}
-
-/* Logo */
-
-.logo{
-
-    text-align:center;
-
-    margin-bottom:35px;
-
-}
-
-.shield{
-
-    width:90px;
-    height:90px;
-
-    margin:0 auto 18px;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    border-radius:50%;
-
-    background:
-    linear-gradient(
-        135deg,
-        var(--primary),
-        var(--secondary)
-    );
-
-    color:#fff;
-
-    font-size:36px;
-
-    animation:pulseGlow 3s infinite;
-
-}
-
-.logo h1{
-
-    font-size:34px;
-
-    letter-spacing:3px;
-
-    font-weight:700;
-
-}
-
-.logo p{
-
-    margin-top:8px;
-
-    color:var(--text-light);
-
-    font-size:15px;
-
-}
-
-/* Form */
-
-#loginForm{
-
-    margin-top:15px;
-
-}
-
-/* Input */
-
-.input-box{
-
-    position:relative;
-
-    margin-bottom:22px;
-
-}
-
-.input-box input{
-
-    width:100%;
-
-    padding:16px 50px 16px 50px;
-
-    border-radius:14px;
-
-    border:1px solid rgba(255,255,255,.12);
-
-    background:rgba(255,255,255,.05);
-
-    color:#fff;
-
-    font-size:15px;
-
-    transition:.35s;
-
-}
-
-.input-box input::placeholder{
-
-    color:#bfcbdc;
-
-}
-
-.input-box input:focus{
-
-    border-color:var(--primary);
-
-    background:rgba(255,255,255,.08);
-
-    box-shadow:
-
-        0 0 18px rgba(0,212,255,.25);
-
-    transform:scale(1.02);
-
-}
-
-/* Left Icon */
-
-.input-box i:first-child{
-
-    position:absolute;
-
-    left:18px;
-    top:18px;
-
-    color:var(--primary);
-
-    font-size:16px;
-
-}
-
-/* Password Toggle */
-
-.toggle{
-
-    position:absolute;
-
-    right:18px;
-    top:18px;
-
-    color:#c7d2e4;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.toggle:hover{
-
-    color:#fff;
-
-}
-
-/* Login Button */
-
-.login-btn{
-
-    width:100%;
-
-    padding:15px;
-
-    margin-top:10px;
-
-    border-radius:14px;
-
-    color:#fff;
-
-    font-size:16px;
-
-    font-weight:600;
-
-    background:
-    linear-gradient(
-        135deg,
-        var(--primary),
-        var(--secondary)
-    );
-
-    position:relative;
-
-    overflow:hidden;
-
-    transition:.35s;
-
-}
-
-.login-btn:hover{
-
-    transform:translateY(-4px);
-
-    box-shadow:
-
-        0 12px 30px rgba(0,212,255,.35);
-
-}
-
-.login-btn:active{
-
-    transform:scale(.98);
-
-}
-
-.login-btn:disabled{
-
-    opacity:.7;
-
-    cursor:not-allowed;
-
-}
-
-/* Shine Animation */
-
-.login-btn::before{
-
-    content:"";
-
-    position:absolute;
-
-    top:0;
-    left:-100%;
-
-    width:50%;
-    height:100%;
-
-    background:
-
-    linear-gradient(
-
-        90deg,
-
-        transparent,
-
-        rgba(255,255,255,.35),
-
-        transparent
-
-    );
-
-    transition:.6s;
-
-}
-
-.login-btn:hover::before{
-
-    left:140%;
-
-}
-
-/* Demo Credentials */
-
-.demo{
-
-    margin-top:30px;
-
-    padding:18px;
-
-    border-radius:15px;
-
-    background:rgba(255,255,255,.05);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    text-align:center;
-
-}
-
-.demo p{
-
-    color:var(--text-light);
-
-    margin-bottom:10px;
-
-    font-size:14px;
-
-}
-
-.demo strong{
-
-    display:block;
-
-    margin:6px 0;
-
-    color:var(--primary);
-
-    font-size:15px;
-
-}
-
-/* Responsive */
-
-@media(max-width:768px){
-
-    .login-card{
-
-        padding:35px 28px;
-
-    }
-
-    .logo h1{
-
-        font-size:28px;
-
-    }
-
-    .shield{
-
-        width:75px;
-        height:75px;
-
-        font-size:30px;
-
-    }
-
-}
-
-@media(max-width:480px){
-
-    #loginPage{
-
-        padding:20px;
-
-    }
-
-    .login-card{
-
-        width:100%;
-
-        border-radius:20px;
-
-        padding:28px 22px;
-
-    }
-
-    .input-box input{
-
-        padding:15px 45px;
-
-    }
-
-    .login-btn{
-
-        padding:14px;
-
-    }
-
-}
-/* ==========================================
-   PART B2.1
-   DASHBOARD • SIDEBAR • HEADER • STATS
-========================================== */
-
-/* Dashboard */
-
-#dashboard{
-
-    display:flex;
-
-    min-height:100vh;
-
-    animation:fadeIn .8s ease;
-
-}
-
-/* ==========================
-   SIDEBAR
-========================== */
-
-.sidebar{
-
-    width:260px;
-
-    background:rgba(255,255,255,.06);
-
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-
-    border-right:1px solid rgba(255,255,255,.10);
-
-    padding:30px 20px;
-
-    display:flex;
-
-    flex-direction:column;
-
-}
-
-/* Brand */
-
-.brand{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:12px;
-
-    font-size:28px;
-
-    font-weight:700;
-
-    color:var(--primary);
-
-    margin-bottom:45px;
-
-}
-
-.brand i{
-
-    font-size:34px;
-
-}
-
-/* Navigation */
-
-.sidebar ul{
-
-    list-style:none;
-
-}
-
-.sidebar li{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    padding:16px 18px;
-
-    margin-bottom:12px;
-
-    border-radius:14px;
-
-    cursor:pointer;
-
-    color:var(--text-light);
-
-    transition:.35s;
-
-    position:relative;
-
-    overflow:hidden;
-
-}
-
-.sidebar li i{
-
-    width:22px;
-
-    text-align:center;
-
-}
-
-/* Hover */
-
-.sidebar li:hover{
-
-    background:rgba(0,212,255,.12);
-
-    color:#fff;
-
-    transform:translateX(8px);
-
-}
-
-/* Active */
-
-.sidebar li.active{
-
-    background:
-
-    linear-gradient(
-        90deg,
-        rgba(0,212,255,.30),
-        transparent
-    );
-
-    color:#fff;
-
-    border-left:4px solid var(--primary);
-
-}
-
-/* Logout */
-
-#logout{
-
-    margin-top:18px;
-
-    color:#ff6b81;
-
-}
-
-#logout:hover{
-
-    background:rgba(255,77,109,.15);
-
-}
-
-/* ==========================
-   MAIN CONTENT
-========================== */
-
-.main{
-
-    flex:1;
-
-    padding:35px;
-
-}
-
-/* ==========================
-   HEADER
-========================== */
-
-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:35px;
-
-}
-
-header h2{
-
-    font-size:32px;
-
-    font-weight:700;
-
-}
-
-header h2 span{
-
-    color:var(--primary);
-
-}
-
-header p{
-
-    margin-top:6px;
-
-    color:var(--text-light);
-
-}
-
-/* Profile */
-
-.profile{
-
-    width:60px;
-
-    height:60px;
-
-    border-radius:50%;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-size:28px;
-
-    background:rgba(255,255,255,.08);
-
-    border:1px solid rgba(255,255,255,.10);
-
-    transition:.35s;
-
-}
-
-.profile:hover{
-
-    transform:rotate(12deg) scale(1.08);
-
-    color:var(--primary);
-
-    box-shadow:
-
-    0 0 25px rgba(0,212,255,.25);
-
-}
-
-/* ==========================
-   PAGE SECTIONS
-========================== */
-
-.page{
-
-    animation:fadeUp .6s ease;
-
-}
-
-/* ==========================
-   STATS GRID
-========================== */
-
-.stats{
-
-    display:grid;
-
-    grid-template-columns:repeat(3,1fr);
-
-    gap:25px;
-
-    margin-bottom:35px;
-
-}
-
-/* ==========================
-   STAT CARD
-========================== */
-
-.stat{
-
-    background:rgba(255,255,255,.08);
-
-    backdrop-filter:blur(18px);
-
-    border:1px solid rgba(255,255,255,.10);
-
-    border-radius:22px;
-
-    padding:28px;
-
-    transition:.35s;
-
-    position:relative;
-
-    overflow:hidden;
-
-}
-
-/* Glow Circle */
-
-.stat::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:180px;
-
-    height:180px;
-
-    top:-90px;
-
-    right:-90px;
-
-    border-radius:50%;
-
-    background:
-
-    radial-gradient(
-
-        rgba(0,212,255,.18),
-
-        transparent 70%
-
-    );
-
-    transition:.4s;
-
-}
-
-/* Hover */
-
-.stat:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:
-
-    0 18px 35px rgba(0,212,255,.18);
-
-}
-
-.stat:hover::before{
-
-    transform:scale(1.3);
-
-}
-
-/* Text */
-
-.stat h3{
-
-    color:var(--text-light);
-
-    font-size:15px;
-
-    margin-bottom:14px;
-
-    font-weight:500;
-
-}
-
-.stat h1{
-
-    font-size:40px;
-
-    font-weight:700;
-
-    color:#fff;
-
-}
-
-/* ==========================
-   RESPONSIVE
-========================== */
-
-@media(max-width:1100px){
-
-    .stats{
-
-        grid-template-columns:repeat(2,1fr);
-
-    }
-
-}
-
-@media(max-width:900px){
-
-    #dashboard{
-
-        flex-direction:column;
-
-    }
-
-    .sidebar{
-
-        width:100%;
-
-        border-right:none;
-
-        border-bottom:1px solid rgba(255,255,255,.10);
-
-    }
-
-    .sidebar ul{
-
-        display:flex;
-
-        flex-wrap:wrap;
-
-        gap:10px;
-
-    }
-
-    .sidebar li{
-
-        flex:1;
-
-        justify-content:center;
-
-        margin-bottom:0;
-
-    }
-
-    .main{
-
-        padding:25px;
-
-    }
-
-}
-
-@media(max-width:650px){
-
-    header{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-        gap:20px;
-
-    }
-
-    .stats{
-
-        grid-template-columns:1fr;
-
-    }
-
-    header h2{
-
-        font-size:26px;
-
-    }
-
-    .stat h1{
-
-        font-size:32px;
-
-    }
-
-}
-/* ==========================================
-   PART B2.2
-   CIA CARDS • PAGE CONTENT • BUTTONS
-   RESPONSIVE • ANIMATIONS
-========================================== */
-
-/* ==========================
-   CARD GRID
-========================== */
-
-.cards{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-
-    gap:28px;
-
-}
-
-/* ==========================
-   CARD
-========================== */
-
-.card{
-
-    position:relative;
-
-    overflow:hidden;
-
-    padding:35px;
-
-    border-radius:22px;
-
-    background:rgba(255,255,255,.08);
-
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-
-    border:1px solid rgba(255,255,255,.10);
-
-    transition:
-        transform .35s,
-        box-shadow .35s;
-
-}
-
-.card::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:180px;
-    height:180px;
-
-    top:-90px;
-    right:-90px;
-
-    border-radius:50%;
-
-    background:
-    radial-gradient(
-        rgba(255,255,255,.12),
-        transparent 70%
-    );
-
-    transition:.4s;
-
-}
-
-.card:hover{
-
-    transform:
-    translateY(-10px)
-    scale(1.02);
-
-}
-
-.card:hover::before{
-
-    transform:scale(1.4);
-
-}
-
-.card .icon{
-
-    width:80px;
-    height:80px;
-
-    border-radius:50%;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    font-size:34px;
-
-    color:#fff;
-
-    margin-bottom:25px;
-
-    transition:.5s;
-
-}
-
-.card:hover .icon{
-
-    transform:
-    rotate(360deg)
-    scale(1.08);
-
-}
-
-.card h2{
-
-    margin-bottom:15px;
-
-    font-size:28px;
-
-}
-
-.card p{
-
-    color:var(--text-light);
-
-    line-height:1.8;
-
-    margin-bottom:25px;
-
-}
-
-/* ==========================
-   CARD COLOURS
-========================== */
-
-.confidentiality{
-
-    border-top:5px solid #00d4ff;
-
-}
-
-.confidentiality .icon{
-
-    background:
-    linear-gradient(135deg,#00d4ff,#0078ff);
-
-}
-
-.confidentiality:hover{
-
-    box-shadow:
-    0 20px 40px rgba(0,212,255,.25);
-
-}
-
-.integrity{
-
-    border-top:5px solid #8b5cf6;
-
-}
-
-.integrity .icon{
-
-    background:
-    linear-gradient(135deg,#8b5cf6,#5b21b6);
-
-}
-
-.integrity:hover{
-
-    box-shadow:
-    0 20px 40px rgba(139,92,246,.25);
-
-}
-
-.availability{
-
-    border-top:5px solid #00d084;
-
-}
-
-.availability .icon{
-
-    background:
-    linear-gradient(135deg,#00d084,#009966);
-
-}
-
-.availability:hover{
-
-    box-shadow:
-    0 20px 40px rgba(0,208,132,.25);
-
-}
-
-/* ==========================
-   BUTTONS
-========================== */
-
-.card button,
-#encrypt,
-#decrypt,
-#restartServer{
-
-    padding:12px 28px;
-
-    border:none;
-
-    border-radius:30px;
-
-    color:#fff;
-
-    font-weight:600;
-
-    cursor:pointer;
-
-    position:relative;
-
-    overflow:hidden;
-
-    transition:.35s;
-
-}
-
-.card button{
-
-    background:
-    linear-gradient(135deg,var(--primary),var(--secondary));
-
-}
-
-#encrypt{
-
-    background:linear-gradient(135deg,#00d084,#009966);
-
-}
-
-#decrypt{
-
-    background:linear-gradient(135deg,#ff9800,#ff5722);
-
-}
-
-#restartServer{
-
-    background:linear-gradient(135deg,#7a3cff,#4a00e0);
-
-}
-
-.card button:hover,
-#encrypt:hover,
-#decrypt:hover,
-#restartServer:hover{
-
-    transform:translateY(-3px);
-
-    box-shadow:0 10px 25px rgba(0,0,0,.25);
-
-}
-
-/* Ripple */
-
-button::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:0;
-    height:0;
-
-    left:50%;
-    top:50%;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.25);
-
-    transform:translate(-50%,-50%);
-
-    transition:.45s;
-
-}
-
-button:hover::after{
-
-    width:260px;
-    height:260px;
-
-}
-
-/* ==========================
-   SECURITY PAGE
-========================== */
-
-textarea{
-
-    width:100%;
-
-    margin-top:10px;
-
-    padding:15px;
-
-    border-radius:15px;
-
-    border:1px solid rgba(255,255,255,.10);
-
-    background:rgba(255,255,255,.06);
-
-    color:#fff;
-
-    resize:vertical;
-
-}
-
-pre{
-
-    margin-top:15px;
-
-    padding:18px;
-
-    border-radius:15px;
-
-    background:rgba(0,0,0,.25);
-
-    color:#00ffcc;
-
-    overflow:auto;
-
-    word-break:break-word;
-
-}
-
-#hashOutput{
-
-    margin-top:15px;
-
-    color:#00d4ff;
-
-    word-break:break-all;
-
-}
-
-/* ==========================
-   SERVER PAGE
-========================== */
-
-#serverStatus{
-
-    margin:10px 0;
-
-    font-weight:600;
-
-}
-
-#serverMessage{
-
-    margin-top:15px;
-
-    color:var(--success);
-
-    font-weight:600;
-
-}
-
-/* ==========================
-   UTILITIES
-========================== */
-
-.fade-in{
-
-    animation:fadeIn .8s ease;
-
-}
-
-.fade-up{
-
-    animation:fadeUp .8s ease;
-
-}
-
-.zoom-in{
-
-    animation:zoomIn .5s ease;
-
-}
-
-/* ==========================
-   EXTRA ANIMATIONS
-========================== */
-
-@keyframes zoomIn{
-
-    from{
-
-        opacity:0;
-
-        transform:scale(.85);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:scale(1);
-
-    }
-
-}
-
-@keyframes slideLeft{
-
-    from{
-
-        opacity:0;
-
-        transform:translateX(-40px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateX(0);
-
-    }
-
-}
-
-@keyframes slideRight{
-
-    from{
-
-        opacity:0;
-
-        transform:translateX(40px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateX(0);
-
-    }
-
-}
-
-/* ==========================
-   GLOBAL TRANSITIONS
-========================== */
-
-*{
-
-    transition:
-
-    background-color .3s,
-
-    color .3s,
-
-    border-color .3s,
-
-    box-shadow .3s,
-
-    transform .3s;
-
-}
-
-/* ==========================
-   RESPONSIVE
-========================== */
-
-@media(max-width:900px){
-
-    .cards{
-
-        grid-template-columns:1fr;
-
-    }
-
-}
-
-@media(max-width:600px){
-
-    .card{
-
-        padding:28px;
-
-    }
-
-    .card h2{
-
-        font-size:24px;
-
-    }
-
-    .card p{
-
-        font-size:14px;
-
-    }
-
-    .card .icon{
-
-        width:70px;
-        height:70px;
-
-        font-size:28px;
-
-    }
-
-    button{
-
-        width:100%;
-
-        margin-top:10px;
-
-    }
-
-}
+});
